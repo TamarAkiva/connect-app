@@ -116,7 +116,7 @@ let questions = [
 {"id":113,"text":"Record a dramatic 'if you're watching this I'm dead' video.","type":"challenge","category":["fun"]},
 {"id":114,"text":"Make a bingo card of movie clichés.","type":"challenge","category":["fun"]},
 {"id":115,"text":"Sign up for a welding class and forge jewelry.","type":"challenge","category":["fun"]},
-{"id":116,"text":"Have a Nerf battle.","type":"challenge","category":["fun"]}
+{"id":116,"text":"Have a Nerf battle.","type":"challenge","category":["fun"]},
 {"id":117,"text":"Have a laser tag battle.","type":"challenge","category":["fun"]}
 ];
 let usedQuestions = {};
@@ -130,7 +130,7 @@ function nextQuestion() {
 
   if (!usedQuestions[category]) usedQuestions[category] = [];
 
-  let filtered = questions.filter(q => q.category === category && !usedQuestions[category].includes(q.id));
+  let filtered = questions.filter(q => q.category.includes(category) && !usedQuestions[category].includes(q.id));
 
   // אם נגמרו השאלות – אפס וחדש
   if (filtered.length === 0) {
