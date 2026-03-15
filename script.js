@@ -1,19 +1,52 @@
-let questions = []
+let data = []
+let usedQuestions = []
 
-fetch("questions.json")
+async function loadData() {
+  const response = await fetch("data.json")
+  data = await response.json()
+}
 
-.then(response => response.json())
+function getFiltered(type, deepMode=false) {
 
-.then(data => {
+  let filtered = data.filter(item => item.type === type)
 
-questions = data
+  if (deepMode) {
+    filtered = filtered.filter(item =>
+      item.category === "self_reflection" ||
+      item.category === "growth" ||
+      item.category === "relationships"
+    )
+  }
 
-})
+  filtered = filtered.filter(item => !usedQuestions.includes(item.id))
 
-function nextQuestion(){
+  if (filtered.length === 0) {
+    usedQuestions = []
+    filtered = data.filter(item => item.type === type)
+  }
 
-const random = Math.floor(Math.random()*questions.length)
+  return filtered
+}
 
-document.getElementById("card").innerText = questions[random]
+function showRandom(type) {
+
+  const deepMode = document.getElementById("deepMode").checked
+
+  const options = getFiltered(type, deepMode)
+
+  const random = options[Math.floor(Math.random() * options.length)]
+
+  usedQuestions.push(random.id)
+
+  const card = document.getElementById("card")
+
+  card.classList.remove("fade")
+
+  setTimeout(() => {
+    card.innerText = random.text
+    card.classList.add("fade")
+  }, 150)
 
 }
+
+loadData()

@@ -2,12 +2,13 @@
 <html>
 
 <head>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Connect</title>
 
 <link rel="stylesheet" href="style.css">
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
 </head>
 
@@ -16,11 +17,28 @@
 <h1>Connect</h1>
 <p>Questions that bring people closer</p>
 
-<div id="card" class="card">
-Press "Next" to start
+<div class="menu">
+<label class="toggle">
+<input type="checkbox" id="deepMode">
+Deep Conversation Mode
+</label>
+<button onclick="startMode('question')">Questions</button>
+<button onclick="startMode('challenge')">Challenges</button>
+<button onclick="startMode('experience')">Experiences</button>
+<button onclick="randomMode()">Random 🎲</button>
+
 </div>
 
-<button onclick="nextQuestion()">Next 🎲</button>
+<div id="card" class="card">
+Choose a mode
+</div>
+
+<div class="actions">
+
+<button onclick="nextItem()">Next</button>
+<button onclick="saveItem()">Save ⭐</button>
+
+</div>
 
 <script src="script.js"></script>
 
