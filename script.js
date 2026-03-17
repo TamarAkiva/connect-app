@@ -122,6 +122,11 @@ let questions = [
 let usedQuestions = {};
 let questionCounter = 0;
 
+// פונקציה לבחירה אקראית מתוך מערך
+function randomItem(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
 function nextQuestion() {
   const category = document.getElementById("categorySelect").value;
   const mode = document.getElementById("modeSelect").value;
