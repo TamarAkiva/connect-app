@@ -92,92 +92,65 @@ let questions = [
 {"id":90,"text":"Draw neurographic lines or mandalas.","type":"experience","category":["learning"]},
 {"id":91,"text":"Keep a daily thought journal.","type":"experience","category":["learning"]},
 
-{"id":92,"text":"Go for a walk and see who gets the most nods from strangers.","type":"challenge","category":["fun"]},
-{"id":93,"text":"Go to an aquarium and name every fish you see.","type":"challenge","category":["fun"]},
-{"id":94,"text":"Decide a new pope between yourselves.","type":"challenge","category":["fun"]},
-{"id":95,"text":"Go to a thrift store and build the best toy army.","type":"challenge","category":["fun"]},
-{"id":96,"text":"Stand guard where one person only tells truths and the other only lies.","type":"challenge","category":["fun"]},
-{"id":97,"text":"Go to Ikea and play family.","type":"challenge","category":["fun"]},
-{"id":98,"text":"Start a flash mob.","type":"challenge","category":["fun"]},
-{"id":99,"text":"Perform a dramatic fake ritual.","type":"challenge","category":["fun"]},
-{"id":100,"text":"Turn your meet-up into a talk show interview.","type":"challenge","category":["fun"]},
-{"id":101,"text":"Return shopping carts in a parking lot competition.","type":"challenge","category":["fun"]},
-{"id":102,"text":"Play 'Will it waffle?' with random foods.","type":"challenge","category":["fun"]},
-{"id":103,"text":"Do a show and tell from your junk drawer.","type":"challenge","category":["fun"]},
-{"id":104,"text":"Go people watching and invent stories.","type":"challenge","category":["fun"]},
-{"id":105,"text":"Plan a fictional bank heist.","type":"challenge","category":["fun"]},
-{"id":106,"text":"Build a Rube Goldberg machine.","type":"challenge","category":["fun"]},
-{"id":107,"text":"Try to beat a high score at an arcade.","type":"challenge","category":["fun"]},
-{"id":108,"text":"Play HORSE while eating donut holes.","type":"challenge","category":["fun"]},
-{"id":109,"text":"Have a lightsaber fight.","type":"challenge","category":["fun"]},
-{"id":110,"text":"Start a podcast debriefing your meet-up.","type":"challenge","category":["fun"]},
-{"id":111,"text":"Test drive a car and see how long you last.","type":"challenge","category":["fun"]},
-{"id":112,"text":"Try solving an old cold case mystery.","type":"challenge","category":["fun"]},
-{"id":113,"text":"Record a dramatic 'if you're watching this I'm dead' video.","type":"challenge","category":["fun"]},
-{"id":114,"text":"Make a bingo card of movie clichés.","type":"challenge","category":["fun"]},
-{"id":115,"text":"Sign up for a welding class and forge jewelry.","type":"challenge","category":["fun"]},
-{"id":116,"text":"Have a Nerf battle.","type":"challenge","category":["fun"]},
-{"id":117,"text":"Have a laser tag battle.","type":"challenge","category":["fun"]}
+{"id":92,"text":"Go for a walk and see who gets the most nods from strangers.","type":"activity","category":["fun"]},
+{"id":93,"text":"Go to an aquarium and name every fish you see.","type":"activity","category":["fun"]},
+{"id":94,"text":"Decide a new pope between yourselves.","type":"activity","category":["fun"]},
+{"id":95,"text":"Go to a thrift store and build the best toy army.","type":"activity","category":["fun"]},
+{"id":96,"text":"Stand guard where one person only tells truths and the other only lies.","type":"activity","category":["fun"]},
+{"id":97,"text":"Go to Ikea and play family.","type":"activity","category":["fun"]},
+{"id":98,"text":"Start a flash mob.","type":"activity","category":["fun"]},
+{"id":99,"text":"Perform a dramatic fake ritual.","type":"activity","category":["fun"]},
+{"id":100,"text":"Turn your meet-up into a talk show interview.","type":"activity","category":["fun"]},
+{"id":101,"text":"Return shopping carts in a parking lot competition.","type":"activity","category":["fun"]},
+{"id":102,"text":"Play 'Will it waffle?' with random foods.","type":"activity","category":["fun"]},
+{"id":103,"text":"Do a show and tell from your junk drawer.","type":"activity","category":["fun"]},
+{"id":104,"text":"Go people watching and invent stories.","type":"activity","category":["fun"]},
+{"id":105,"text":"Plan a fictional bank heist.","type":"activity","category":["fun"]},
+{"id":106,"text":"Build a Rube Goldberg machine.","type":"activity","category":["fun"]},
+{"id":107,"text":"Try to beat a high score at an arcade.","type":"activity","category":["fun"]},
+{"id":108,"text":"Play HORSE while eating donut holes.","type":"activity","category":["fun"]},
+{"id":109,"text":"Have a lightsaber fight.","type":"activity","category":["fun"]},
+{"id":110,"text":"Start a podcast debriefing your meet-up.","type":"activity","category":["fun"]},
+{"id":111,"text":"Test drive a car and see how long you last.","type":"activity","category":["fun"]},
+{"id":112,"text":"Try solving an old cold case mystery.","type":"activity","category":["fun"]},
+{"id":113,"text":"Record a dramatic 'if you're watching this I'm dead' video.","type":"activity","category":["fun"]},
+{"id":114,"text":"Make a bingo card of movie clichés.","type":"activity","category":["fun"]},
+{"id":115,"text":"Sign up for a welding class and forge jewelry.","type":"activity","category":["fun"]},
+{"id":116,"text":"Have a Nerf battle.","type":"activity","category":["fun"]},
+{"id":117,"text":"Have a laser tag battle.","type":"activity","category":["fun"]}
 ];
 let usedQuestions = {};
 let questionCounter = 0;
 
-// פונקציה לבחירה אקראית מתוך מערך
-function randomItem(array) {
-  return array[Math.floor(Math.random() * array.length)];
-}
-
-let normalCounter = 0; // ספירה של שאלות רגילות
-
 function nextQuestion() {
   const category = document.getElementById("categorySelect").value;
-  const mode = document.getElementById("modeSelect").value;
   if (!usedQuestions[category]) usedQuestions[category] = [];
+
   let categoryQuestions = questions.filter(q =>
     q.category.includes(category)
   );
+
   let available = categoryQuestions.filter(q =>
     !usedQuestions[category].includes(q.id)
   );
+
+  // אם נגמרו השאלות – איפוס
   if (available.length === 0) {
     usedQuestions[category] = [];
     available = categoryQuestions;
   }
-  let question;
-  if (mode === "normal") {
-    // שאלה אקראית מכל הקטגוריה
-    question = randomItem(available);
-  } else {
-    // GAME MODE
-    let normalQuestions = available.filter(q => q.type === "question");
-    let challenges = available.filter(q => q.type === "challenge");
 
-    if (normalCounter >= 3 && challenges.length > 0) {
-      // אחרי 3 שאלות רגילות, בחר אתגר
-      question = randomItem(challenges);
-      normalCounter = 0; // איפוס המונה
-    } else if (normalQuestions.length > 0) {
-      // בחר שאלה רגילה
-      question = randomItem(normalQuestions);
-      normalCounter++;
-    } else if (challenges.length > 0) {
-      // אין שאלות רגילות קח אתגר
-      question = randomItem(challenges);
-      normalCounter = 0;
-    } else {
-      // אין שום שאלה זמינה קח מהזמינות
-      question = randomItem(available);
-    }
-  }
-
+  // בחר שאלה אקראית
+  let question = randomItem(available);
   usedQuestions[category].push(question.id);
-  displayQuestion(question, mode);
+
+  displayQuestion(question);
 }
 
-function displayQuestion(question, mode) {
+function displayQuestion(question) {
   const card = document.getElementById("card");
-  
-  if (mode === "game" && question.type === "challenge") {
+
+  if (question.type === "challenge") {
     card.classList.add("challenge");
     card.innerText = "Challenge unlocked!\n\n" + question.text;
   } else {
