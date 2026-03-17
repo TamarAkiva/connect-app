@@ -127,64 +127,57 @@ function randomItem(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
+let normalCounter = 0; // ספירה של שאלות רגילות
+
 function nextQuestion() {
   const category = document.getElementById("categorySelect").value;
   const mode = document.getElementById("modeSelect").value;
-  if (!usedQuestions[category]) {
-    usedQuestions[category] = [];
-  }
-
-  // כל השאלות בקטגוריה
+  if (!usedQuestions[category]) usedQuestions[category] = [];
   let categoryQuestions = questions.filter(q =>
     q.category.includes(category)
   );
-
-  // שאלות שלא נשאלו עדיין
   let available = categoryQuestions.filter(q =>
     !usedQuestions[category].includes(q.id)
   );
-
-  // אם נגמרו השאלות איפוס
   if (available.length === 0) {
     usedQuestions[category] = [];
     available = categoryQuestions;
   }
-
   let question;
-
-  // NORMAL MODE
   if (mode === "normal") {
+    // שאלה אקראית מכל הקטגוריה
     question = randomItem(available);
-  }
-  // GAME MODE
-  else {
-    if (questionCounter >= 3) {
-      let challenges = available.filter(q => q.type === "challenge");
-      if (challenges.length > 0) {
-        question = randomItem(challenges);
-        questionCounter = 0;
-      } else {
-        question = randomItem(available);
-      }
-    } else {
-      let normalQuestions = available.filter(q => q.type === "question");
+  } else {
+    // GAME MODE
+    let normalQuestions = available.filter(q => q.type === "question");
+    let challenges = available.filter(q => q.type === "challenge");
 
-      if (normalQuestions.length > 0) {
-        question = randomItem(normalQuestions);
-      } else {
-        question = randomItem(available);
-      }
-      questionCounter++;
+    if (normalCounter >= 3 && challenges.length > 0) {
+      // אחרי 3 שאלות רגילות, בחר אתגר
+      question = randomItem(challenges);
+      normalCounter = 0; // איפוס המונה
+    } else if (normalQuestions.length > 0) {
+      // בחר שאלה רגילה
+      question = randomItem(normalQuestions);
+      normalCounter++;
+    } else if (challenges.length > 0) {
+      // אין שאלות רגילות קח אתגר
+      question = randomItem(challenges);
+      normalCounter = 0;
+    } else {
+      // אין שום שאלה זמינה קח מהזמינות
+      question = randomItem(available);
     }
   }
 
   usedQuestions[category].push(question.id);
-  displayQuestion(question);
+  displayQuestion(question, mode);
 }
 
-function displayQuestion(question) {
+function displayQuestion(question, mode) {
   const card = document.getElementById("card");
-  if (question.type === "challenge") {
+  
+  if (mode === "game" && question.type === "challenge") {
     card.classList.add("challenge");
     card.innerText = "Challenge unlocked!\n\n" + question.text;
   } else {
