@@ -120,27 +120,71 @@ let questions = [
 {"id":117,"text":"Have a laser tag battle.","type":"challenge","category":["fun"]}
 ];
 let usedQuestions = {};
+let questionCounter = 0;
 
-
-
-// פונקציה להצגת שאלה אקראית לפי קטגוריה
 function nextQuestion() {
-  const select = document.getElementById("categorySelect");
-  const category = select.value;
+  const category = document.getElementById("categorySelect").value;
+  const mode = document.getElementById("modeSelect").value;
+  if (!usedQuestions[category]) {
+    usedQuestions[category] = [];
+  }
+  // כל השאלות בקטגוריה
+  let categoryQuestions = questions.filter(q =>
+    q.category.includes(category)
+  );
+  // שאלות שלא נשאלו עדיין
+  let available = categoryQuestions.filter(q =>
+    !usedQuestions[category].includes(q.id)
+  );
+  // אם נגמרו השאלות איפוס
+  if (available.length === 0) {
+    usedQuestions[category] = [];
+    available = categoryQuestions;
+  }
+  let question;
+  // NORMAL MODE
+  if (mode === "normal") {
+    question = randomItem(available);
+  }
+  // GAME MODE
+  else {
+    if (questionCounter >= 3) {
+      let challenges = available.filter(q => q.type === "challenge");
+      if (challenges.length > 0) {
+        question = randomItem(challenges);
+        questionCounter = 0;
+      } else {
+        question = randomItem(available);
+      }
+    } else {
+      let normalQuestions = available.filter(q => q.type === "question");
 
-  if (!usedQuestions[category]) usedQuestions[category] = [];
-
-  let filtered = questions.filter(q => q.category.includes(category) && !usedQuestions[category].includes(q.id));
-
-  // אם נגמרו השאלות – אפס וחדש
-  if (filtered.length === 0) {
-  usedQuestions[category] = [];
-  filtered = questions.filter(q => q.category.includes(category) && !usedQuestions[category].includes(q.id));
-}
-
-  const randomIndex = Math.floor(Math.random() * filtered.length);
-  const question = filtered[randomIndex];
+      if (normalQuestions.length > 0) {
+        question = randomItem(normalQuestions);
+      } else {
+        question = randomItem(available);
+      }
+      questionCounter++;
+    }
+  }
   usedQuestions[category].push(question.id);
-
+  displayQuestion(question);
+}
+// פונקציה לבחירה אקראית
+function randomItem(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+// פונקציה להצגת השאלה
+function displayQuestion(question) {
+  const card = document.getElementById("card");
+  if (question.type === "challenge") {
+    card.classList.add("challenge");
+    card.innerText = "Challenge unlocked\n\n" + question.text;
+  } else {
+    card.classList.remove("challenge");
+    card.innerText = question.text;
+  }
+}
+  usedQuestions[category].push(question.id);
   document.getElementById("card").innerText = question.text;
 }
