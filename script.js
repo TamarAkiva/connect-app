@@ -176,3 +176,14 @@ function nextQuestion() {
   usedQuestions[category].push(question.id);
   displayQuestion(question);
 }
+
+function displayQuestion(question) {
+  const card = document.getElementById("card");
+  if (question.type === "challenge") {
+    card.classList.add("challenge");
+    card.innerText = "Challenge unlocked!\n\n" + question.text;
+  } else {
+    card.classList.remove("challenge");
+    card.innerText = question.text;
+  }
+}
