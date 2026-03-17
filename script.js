@@ -122,6 +122,10 @@ let questions = [
 let usedQuestions = {};
 let questionCounter = 0;
 
+function randomItem(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
 function nextQuestion() {
   const category = document.getElementById("categorySelect").value;
   if (!usedQuestions[category]) usedQuestions[category] = [];
