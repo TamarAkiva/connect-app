@@ -128,20 +128,25 @@ function nextQuestion() {
   if (!usedQuestions[category]) {
     usedQuestions[category] = [];
   }
+
   // כל השאלות בקטגוריה
   let categoryQuestions = questions.filter(q =>
     q.category.includes(category)
   );
+
   // שאלות שלא נשאלו עדיין
   let available = categoryQuestions.filter(q =>
     !usedQuestions[category].includes(q.id)
   );
+
   // אם נגמרו השאלות איפוס
   if (available.length === 0) {
     usedQuestions[category] = [];
     available = categoryQuestions;
   }
+
   let question;
+
   // NORMAL MODE
   if (mode === "normal") {
     question = randomItem(available);
@@ -167,24 +172,7 @@ function nextQuestion() {
       questionCounter++;
     }
   }
+
   usedQuestions[category].push(question.id);
   displayQuestion(question);
-}
-// פונקציה לבחירה אקראית
-function randomItem(array) {
-  return array[Math.floor(Math.random() * array.length)];
-}
-// פונקציה להצגת השאלה
-function displayQuestion(question) {
-  const card = document.getElementById("card");
-  if (question.type === "challenge") {
-    card.classList.add("challenge");
-    card.innerText = "Challenge unlocked\n\n" + question.text;
-  } else {
-    card.classList.remove("challenge");
-    card.innerText = question.text;
-  }
-}
-  usedQuestions[category].push(question.id);
-  document.getElementById("card").innerText = question.text;
 }
