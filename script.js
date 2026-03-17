@@ -125,31 +125,25 @@ let questionCounter = 0;
 function nextQuestion() {
   const category = document.getElementById("categorySelect").value;
   if (!usedQuestions[category]) usedQuestions[category] = [];
-
   let categoryQuestions = questions.filter(q =>
     q.category.includes(category)
   );
-
   let available = categoryQuestions.filter(q =>
     !usedQuestions[category].includes(q.id)
   );
-
   // אם נגמרו השאלות – איפוס
   if (available.length === 0) {
     usedQuestions[category] = [];
     available = categoryQuestions;
   }
-
   // בחר שאלה אקראית
   let question = randomItem(available);
   usedQuestions[category].push(question.id);
-
   displayQuestion(question);
 }
 
 function displayQuestion(question) {
   const card = document.getElementById("card");
-
   if (question.type === "challenge") {
     card.classList.add("challenge");
     card.innerText = "Challenge unlocked!\n\n" + question.text;
